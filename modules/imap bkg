@@ -1,0 +1,122 @@
+const Imap = require('imap');
+const { simpleParser } = require('mailparser');
+
+function getFirstTwentyEmails(emailAddress, password, threads) {
+
+    console.log(`
+        email:${emailAddress},
+        password:${password}
+    `)
+
+    const imapConfig = ({
+        user: emailAddress,
+        password: password,
+        host: 'imap.gmail.com',
+        port: 993,
+        tls: true,
+        tlsOptions: {
+            rejectUnauthorized: false
+        }
+    });
+
+    // Create new IMAP instance
+    const imap = new Imap(imapConfig);
+
+    // Function to fetch emails
+    function fetchEmails() {
+        return new Promise((resolve, reject) => {
+            let returnValue = [];
+            imap.openBox('INBOX', true, (err, box) => {
+                if (err) reject(err);
+
+                // Search for all emails
+                imap.search(['ALL'], (err, results) => {
+                    if (err) reject(err);
+
+                    // Reverse the order of search results to get the most recent emails first
+                    results.reverse();
+
+                    // Limit the number of emails to retrieve
+                    const limitedResults = results.slice(0, 30); // Limit to 20 emails
+
+                    const fetchPromises = limitedResults.map((emailId) => {
+                        return new Promise((resolveFetch, rejectFetch) => {
+                            const fetchOptions = {
+                                bodies: '',
+                                struct: true
+                            };
+
+                            // Fetch the email
+                            const fetch = imap.fetch(emailId, fetchOptions);
+                            fetch.on('message', (msg) => {
+                                let body = '';
+
+                                msg.on('body', (stream) => {
+                                    simpleParser(stream, async (err, parsed) => {
+                                        if (err) rejectFetch(err);
+
+                                        // Extract date, sender, and subject
+                                        const date = parsed.date;
+                                        const from = parsed.from.text;
+                                        const subject = parsed.subject;
+                                        const inReplyTo = parsed.inReplyTo;
+                                        body = parsed.text;
+
+                                        if (threads.includes(inReplyTo)) {
+                                            returnValue.push({
+                                                from: from,
+                                                date: date,
+                                                subject: subject,
+                                                body: body
+                                            });
+                                        }
+
+
+                                        resolveFetch();
+                                    });
+                                });
+                            });
+                        });
+                    });
+
+                    Promise.all(fetchPromises)
+                        .then(() => resolve(returnValue))
+                        .catch(reject);
+                });
+            });
+        });
+    }
+
+    // Connect to the IMAP server
+    return new Promise((resolve, reject) => {
+        imap.once('ready', () => {
+            console.log('Connected to IMAP server');
+            fetchEmails()
+                .then((results) => {
+                    console.log(results)
+                })
+                .catch(reject);
+        });
+
+        // Log any errors
+        imap.once('error', (err) => {
+            console.error('IMAP error:', err);
+            reject(err);
+        });
+
+        // Start the IMAP connection
+        imap.connect();
+    });
+}
+
+
+
+
+
+
+module.exports = {
+    getFirstTwentyEmails
+}
+
+
+
