@@ -18,6 +18,17 @@ const clients = [];
 const server = http.createServer();
 const wss = new WebSocket.Server({ server });
 
+const fs = require('fs');
+const https = require('https');
+
+const sslOptions = {
+  key: fs.readFileSync('/home/ubuntu/selfsigned.key'),
+  cert: fs.readFileSync('/home/ubuntu/selfsigned.crt')
+};
+
+
+
+
 wss.on('connection', (ws) => {
     clients.push(ws);
     ws.on('close', () => {
@@ -1361,16 +1372,16 @@ app.get("*", (req, res) => {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    app.listen(process.env.PORT, () => {
-      console.log("Connected to port " + port + " and Database");
+    https.createServer(sslOptions, app).listen(process.env.PORT, () => {
+      console.log('Connected to port ' + process.env.PORT + ' and Database');
     });
 
     server.listen(4001, () => {
       console.log('WebSocket server is listening on port 4001');
-  }); 
+    });
   })
   .catch((error) => {
-    console.log("Could not connect to DataBase");
+    console.log('Could not connect to DataBase');
   }); 
 
 //"Could not connect to DataBase"
