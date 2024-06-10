@@ -1323,8 +1323,8 @@ app.post("/v2", async (req, res) => {
 
 const config = {
   imap: {
-    user: "support@safehaventb.com",
-    password: "Havensafe2024@",
+    user: "chima@innerweb.org",
+    password: "@Chimsyboy2275",
     host: "premium173.web-hosting.com",
     port: 993, // Port for IMAP over SSL
     tls: true,
