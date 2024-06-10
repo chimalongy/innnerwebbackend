@@ -12,22 +12,11 @@ const taskModel = require("./models/taskSchema");
 const scrapeModel = require("./models/scrapeSchema");
 let port = process.env.PORT;
  
-const http = require('http');
+
 const WebSocket = require('ws');
 const clients = [];
 const server = http.createServer();
 const wss = new WebSocket.Server({ server });
-
-const fs = require('fs');
-const https = require('https');
-
-const sslOptions = {
-  key: fs.readFileSync('/home/ubuntu/selfsigned.key'),
-  cert: fs.readFileSync('/home/ubuntu/selfsigned.crt')
-};
-
-
-
 
 wss.on('connection', (ws) => {
     clients.push(ws);
@@ -1372,7 +1361,7 @@ app.get("*", (req, res) => {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    https.createServer(sslOptions, app).listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, () => {
       console.log('Connected to port ' + process.env.PORT + ' and Database');
     });
 
