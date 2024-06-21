@@ -94,7 +94,7 @@ async function sendNewOutbound(taskData) {
 
 
 
-    const unsubscribeLink = `https://innerweb.org/outboundunsub?email=${taskData.emailList[i]}&outboundname=${taskData.outboundName}`;
+    const unsubscribeLink = `https://webcaret.com/outboundunsub?email=${taskData.emailList[i]}&outboundname=${taskData.outboundName}`;
     let emailBody = generateBody(taskData.outboundName, taskData.taskBody, unsubscribeLink);
     
     console.log("sending to " + taskData.emailList[i]);
@@ -140,7 +140,7 @@ async function sendFollowUp(taskData) {
    let newMessageIDs=[];
   for (let i = 0; i < taskData.emailList.length; i++) {
     
-    const unsubscribeLink = `https://innerweb.org/outboundunsub?email=${taskData.emailList[i]}&outboundname=${taskData.outboundName}`;
+    const unsubscribeLink = `https://webcaret.com/outboundunsub?email=${taskData.emailList[i]}&outboundname=${taskData.outboundName}`;
     let emailBody = generateBody(taskData.outboundName, taskData.taskBody, unsubscribeLink);
 
     const mailOptions = {

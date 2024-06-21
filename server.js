@@ -1323,9 +1323,11 @@ app.post("/v2", async (req, res) => {
 
 const config = {
   imap: {
-    user: "chima@innerweb.org",
+    user: "michael@webcaret.com",
     password: "@Chimsyboy2275",
     host: "premium173.web-hosting.com",
+    //host: "mail.webcaret.com",
+   // host: "web-hosting.com",
     port: 993, // Port for IMAP over SSL
     tls: true,
     timeout: 5000,
@@ -1337,10 +1339,7 @@ const pollEmails = (config) => {
       readEmails(config)
           .then((emails) => {
               
-                  notifyClients(emails);
-                 
-                  
-             
+                  notifyClients(emails);      
           })
           .catch((err) => {
               console.error('Error:', err);
