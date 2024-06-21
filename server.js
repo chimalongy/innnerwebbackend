@@ -13,28 +13,10 @@ const scrapeModel = require("./models/scrapeSchema");
 let port = process.env.PORT;
 
  
-// const http = require('http');
-// const WebSocket = require('ws');
-// const clients = [];
-// const server = http.createServer();
-// const wss = new WebSocket.Server({ server });
-
-// wss.on('connection', (ws) => {
-//     clients.push(ws);
-//     ws.on('close', () => {
-//         clients.splice(clients.indexOf(ws), 1);
-//     });
-// });
- 
-const https = require('https');
-const fs = require('fs');
+const http = require('http');
 const WebSocket = require('ws');
-const serverOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/innerweb.org-0001/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/innerweb.org-0001/fullchain.pem')
-};
 const clients = [];
-const server = https.createServer(serverOptions);
+const server = http.createServer();
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
@@ -43,6 +25,24 @@ wss.on('connection', (ws) => {
         clients.splice(clients.indexOf(ws), 1);
     });
 });
+ 
+// const https = require('https');
+// const fs = require('fs');
+// const WebSocket = require('ws');
+// const serverOptions = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/innerweb.org-0001/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/innerweb.org-0001/fullchain.pem')
+// };
+// const clients = [];
+// const server = https.createServer(serverOptions);
+// const wss = new WebSocket.Server({ server });
+
+// wss.on('connection', (ws) => {
+//     clients.push(ws);
+//     ws.on('close', () => {
+//         clients.splice(clients.indexOf(ws), 1);
+//     });
+// });
 
 const notifyClients = (email) => {
     clients.forEach((client) => {
@@ -841,7 +841,7 @@ app.post("/getReplies", async (req, res) => {
     .catch((err) => {
       console.log(err);
     });
-});
+}); 
 
 app.post("/deleteOutbound", async (req, res) => {
   const { outboundName, ownerAccount } = req.body;
