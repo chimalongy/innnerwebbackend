@@ -11,11 +11,30 @@ const outBoundModel = require("./models/outboundSchema");
 const taskModel = require("./models/taskSchema");
 const scrapeModel = require("./models/scrapeSchema");
 let port = process.env.PORT;
+
  
-const http = require('http');
+// const http = require('http');
+// const WebSocket = require('ws');
+// const clients = [];
+// const server = http.createServer();
+// const wss = new WebSocket.Server({ server });
+
+// wss.on('connection', (ws) => {
+//     clients.push(ws);
+//     ws.on('close', () => {
+//         clients.splice(clients.indexOf(ws), 1);
+//     });
+// });
+ 
+const https = require('https');
+const fs = require('fs');
 const WebSocket = require('ws');
+const serverOptions = {
+  key: fs.readFileSync('/etc/letsencrypt/live/innerweb.org-0001/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/innerweb.org-0001/fullchain.pem')
+};
 const clients = [];
-const server = http.createServer();
+const server = https.createServer(serverOptions);
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
