@@ -31,7 +31,7 @@ function generateBody(outboundName, taskBody, unsubscribeLink) {
           font-weight:bold;
           width:80%;
           margin: 0 auto;
-          border-radius:10px;
+          border-radius:5px;
         }
         .content {
           padding: 10px;
@@ -42,7 +42,7 @@ function generateBody(outboundName, taskBody, unsubscribeLink) {
           padding: 10px 20px;
           text-align: center;
           font-size: 10px;
-          border-radius:20px;
+          border-radius:10px;
           margin: 0 auto;
           margin-top: 20px;
         }
@@ -61,7 +61,7 @@ function generateBody(outboundName, taskBody, unsubscribeLink) {
           ${taskBody}
         </div>
         <div class="footer">
-        <p>We believe this domain could greatly benefit your business. If you're not interested, you can <a href="${unsubscribeLink}" target="_blank" rel="noopener noreferrer">unsubscribe here</a>.</p>
+        <p>Not interested? <a href="${unsubscribeLink}" target="_blank" rel="noopener noreferrer">unsubscribe here</a>.</p>
         </div>
       </div>
     </body>

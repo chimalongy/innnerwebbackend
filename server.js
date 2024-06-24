@@ -1309,12 +1309,30 @@ app.post("/v2", async (req, res) => {
       }
 
       
+    }
 
-     
-
+    if (action==="fetchmobilereplies"){
+  
+      const config = { 
+        imap: {
+          user: "michael@webcaret.com",
+          password: "@Chimsyboy2275",
+          host: "premium173.web-hosting.com",
+          //host: "mail.webcaret.com",
+         // host: "web-hosting.com",
+          port: 993, // Port for IMAP over SSL
+          tls: true,
+          timeout: 5000,
+        },
+      };
       
-     
-
+      readEmails(config)
+          .then((emails) => {     
+                res.status(200).json({emails:emails})    
+          })
+          .catch((err) => {
+              console.error('Error:', err);
+          });
 
       
     }
